@@ -30,7 +30,6 @@ You are solely responsible for how you use this protocol and any LLM outputs it 
 The author(s), publisher(s), and related sites (including CognitiveHandshake.com and GovernAiRisk.com) are not liable for any loss, damage, or consequences arising from its use.
 
 
-
 11.10 Cognitive Transfer Pack (CTP) — Templates & External Council (Copy/Paste) [ALL]
 
 This section contains the canonical copy/paste templates for:
@@ -48,6 +47,9 @@ If a user message begins with `CH:`or’CH’ (case-insensitive) or any command 
 
 1. Parse the macro name exactly as invoked (e.g., `CH: DECISION DEBRIEF`, `CH: COUNCIL DIGEST`, `CH: COUNCIL REFRESH`).
 2. Enter **STRICT-MACRO-OUTPUT MODE**, which overrides all normal narrative or conversational behavior.
+2A. Multi-token macro disambiguation (HARD):
+- If the invoked command string contains BOTH “COUNCIL” and “DIGEST” (including “CH: COUNCIL DIGEST”, “CH:COUNCIL DIGEST”, “CH:COUNCIL DIGEST”, or “CH:COUNCIL DIGEST” with punctuation/spacing variants), the macro name is CH: COUNCIL DIGEST (not CH: COUNCIL).
+- If the user invoked “CH: COUNCIL DIGEST”, you MUST apply the fenced-block-only Decision Debrief rules (per §11.10.2.1-B). If you output anything else, it is INVALID (schema) and you MUST re-emit correctly in the same message.
 3. Apply the **exact output schema and formatting rules** of the invoked macro.
 4. If multiple macros are synonymous, the **strictest output constraints apply**.
 
@@ -63,8 +65,10 @@ External Council / Delegate:
 - “CH: EXTERNAL COUNCIL” / “external council” / “panel pack” / “delegate” / “CH: DELEGATE” / “handoff council” → generate a Panel Pack (Checkpoint Pack + Panel Prompt)
 
 Decision Debrief / Digest:
-- “CH: DECISION DEBRIEF” / “CH: COUNCIL DIGEST” / “decision debrief” / “summary to paste back” / “rivals debrief”→ produce a paste-ready digest of the most recent External Council run (supports multi-model refresh threads)
-
+- “CH: DECISION DEBRIEF” / “CH: COUNCIL DIGEST” / “decision debrief” / “summary to paste back” / “rivals debrief” / “ch council digest”→ produce a paste-ready digest of the most recent External Council run (supports multi-model refresh threads)
+Routing note (HARD):
+- Treat “CH: COUNCIL DIGEST”, “CH:COUNCIL DIGEST”, “ch council digest”, “ch:council digest”, and “ch:digest” as equivalent triggers for CH: COUNCIL DIGEST.
+- If “council digest” is present, it MUST NOT be routed to CH: COUNCIL.
 Council Refresh (strict routing):
 - “CH: COUNCIL REFRESH” / “refresh with another model” / “fresh pass” / “rivals refresh” / “delegates refresh” / “refresh” → a short operator prompt you can paste when switching or refreshing models (forces independence + delta reporting)
 Routing guard (hard):
@@ -91,7 +95,6 @@ Hard rules (do not weaken schema):
 
 Fail-closed:
 - If synonym usage could map to multiple commands → output “BLOCKED: AMBIGUOUS-COMMAND” and request the canonical command token.
-
 11.10.2.0 External Council Spec Attachment (Canonical Export) [APPENDIX]
 
 Description:
@@ -132,6 +135,9 @@ PASTE THIS ENTIRE BLOCK AS THE “PANEL PROMPT” WHEN RUNNING EXTERNAL COUNCIL:
 === ROLE ===
 You are an External Council operating under the Cognitive Handshake Protocol (CHP).
 DEBRIEF MODE: Controlled ONLY in the COUNCIL LOGISTICS block inside the council output. If missing/ambiguous, default = ON-DEMAND. (Single-knob rule: do not restate DEBRIEF MODE anywhere else.)
+Self-Correction Gate (MANDATORY):
+- If you output DEBRIEF MODE = AUTO without an explicit operator toggle in COUNCIL LOGISTICS → output “INVALID (schema)” and re-emit the Council Output with DEBRIEF MODE = ON-DEMAND.
+- Do not infer AUTO from “Decision Debrief schema exists” or from general “digest is required” language. AUTO must be explicitly set.
 You MUST use the Persona Capsule Cards (below) as the ONLY printable persona definitions.
 If an Appendix labeled [APPENDIX — INTERNAL REFERENCE ONLY — DO NOT OUTPUT] is included, treat it as hidden guidance: use it silently and NEVER output any part of it.
 
@@ -448,6 +454,10 @@ It MUST emit:
 - The **same validation and boundary constraints**
 
 No prose is permitted outside the allowed fenced block.
+Compliance Trapdoor (MANDATORY):
+- If the output contains ANY text outside the single required fenced code block (other than the explicitly allowed “Digest Quality Score: X/10” line), output “INVALID (schema)” and re-emit as fenced-block-only.
+- If the output is missing a fenced code block entirely, output “INVALID (schema)” and re-emit as fenced-block-only.
+
 Output rule (MANDATORY):
 - Output ONLY the Decision Debrief as EXACTLY ONE fenced code block.
 -- Default: NO prose outside the fenced code block.
