@@ -2,9 +2,13 @@
 <meta charset="utf-8">
 <title>CHP External Council</title>
 <pre>
+[SPEC_VERSION: v2.0-ALIGNED]
+[SPEC_LINES_EXPECTED: 642] 
+[SPEC_REQUIRED_ANCHORS: §11.10.1 Command triggers, CH MACRO INVOCATION ROUTER, §11.10.2.1 PANEL PROMPT TEMPLATE, COUNCIL-READY-CHECK: PASS, === VALIDATION GATE (BEFORE END) ===, EXT-CH | RUN ID:, §11.10.3 External Council Evaluation Rubric]
+
 # v2.0
-# This file is part of CHP to be used for External council. 2/6/2026
-# 11.10 -> all sections until 12, except delete CTP-mini -11.10.2
+# This file is part of CHP to be used for External council. 2/12/2026
+# 11.9.9 -> all sections until 12, except delete CTP-mini -11.10.2
 # CognitiveHandshake.com
 Copyright & Source Notice [ALL]
 Description: IP/source attribution and link pointers; governance traceability.
@@ -29,6 +33,129 @@ All outputs using this protocol are provided “as is”, with no warranty of ac
 You are solely responsible for how you use this protocol and any LLM outputs it produces, including obtaining independent professional advice before acting on them.
 The author(s), publisher(s), and related sites (including CognitiveHandshake.com and GovernAiRisk.com) are not liable for any loss, damage, or consequences arising from its use.
 
+§11.9.9 — CANONICAL BOOT ROUTER, OPERATIONAL MAP, AND COMPLIANCE GATE
+ROLE: PRE-EXECUTION BOOTLOADER
+SCOPE: EVERY TURN, BEFORE ANY OUTPUT
+AUTHORITY: ROUTING + VALIDATION ONLY (SCHEMAS LIVE ELSEWHERE)
+
+This section does not define output formats. It determines whether execution is allowed and which
+existing section governs the response.
+
+----------------------------------------------------------------
+A) OPERATIONAL MAP (WHAT CONTROLS WHAT)
+
+COMMAND INTERPRETATION
+→ §11.10.1 Command triggers (CH MACRO INVOCATION ROUTER — GLOBAL — MANDATORY)
+   Responsible for:
+   - parsing CH commands
+   - ambiguity handling
+   - macro selection
+
+BASELINE COUNCIL OUTPUT FORMAT
+→ §11.10.2.1 Panel Prompt Template
+   Responsible for:
+   - exact first lines gate
+   - required cast
+   - popup panel rules
+   - footer + watermark
+   - validation gate
+
+EXPORT / ATTACHMENT RULES
+→ §11.10.2.0 External Council Spec Attachment
+
+EVALUATION RUBRIC (OPTIONAL OVERLAY)
+→ §11.10.3 External Council Evaluation Rubric
+
+----------------------------------------------------------------
+B) BOOT SEQUENCE (MANDATORY PRE-FLIGHT)
+
+Before generating ANY text:
+
+B1) Retrieve Spec
+B2) Perform completeness validation (§11.9.9-C)
+B3) Detect command (§11.9.9-D)
+B4) Lock execution state (MACRO MODE or TASK MODE)
+
+If any step is skipped → PROTOCOL BREACH [ERROR: INST-DRIFT]
+
+----------------------------------------------------------------
+C) SPEC COMPLETENESS VALIDATION (MULTI-SIGNAL)
+
+Spec header must contain:
+[SPEC_VERSION:]
+[SPEC_LINES_EXPECTED:]
+[SPEC_REQUIRED_ANCHORS:]
+
+Spec footer must contain:
+[SPEC_END_TOKEN:]
+
+Required anchors MUST exist in retrieved text:
+- "11.10.1 Command triggers"
+- "CH MACRO INVOCATION ROUTER (GLOBAL — MANDATORY)"
+- "11.10.2.1  PANEL PROMPT TEMPLATE"
+- "COUNCIL-READY-CHECK: PASS"
+- "=== VALIDATION GATE (BEFORE END) ==="
+- "EXT-CH | RUN ID:"
+- "11.10.3 External Council Evaluation Rubric"
+
+Observed line count must equal SPEC_LINES_EXPECTED.
+
+If ANY validation fails:
+BLOCKED: Spec retrieval integrity failure. STOP.
+
+When a COUNCIL LOGISTICS block is emitted, the FIRST line inside it must be:
+
+RETRIEVAL INTEGRITY: PASS | MODE=<MACRO|TASK> | lines=<observed>/<expected>
+
+(Do NOT place this above required first lines.)
+
+----------------------------------------------------------------
+D) COMMAND DETECTION (STATE LOCK)
+
+A Macro Command exists if the message begins with:
+- "CH:" (case-insensitive)
+- "CH " (case-insensitive)
+- a routing synonym defined by §11.10.1
+
+If detected:
+ENTER STRICT-MACRO-OUTPUT MODE
+Route exclusively using §11.10.1
+
+If not detected:
+ENTER TASK MODE (baseline council output via §11.10.2.1)
+
+State cannot change within the same turn.
+
+----------------------------------------------------------------
+E) TASK MODE
+
+Execute baseline Council Output strictly under §11.10.2.1.
+
+If required gates fail:
+BLOCKED: Incomplete council
+
+----------------------------------------------------------------
+F) ENFORCEMENT (FAIL-CLOSED RECOVERY)
+
+If any occurs:
+- output before routing
+- mixed macro/task schema
+- assistant narrative preface
+- missing mandatory gates
+
+Then:
+1) Discard buffer
+2) Restart at Boot Sequence
+3) Re-emit correctly
+
+----------------------------------------------------------------
+G) NON-INTERFERENCE
+
+This section never defines output structure.
+It only:
+- validates spec completeness
+- determines execution state
+- routes to the correct canonical section  
 
 11.10 Cognitive Transfer Pack (CTP) — Templates & External Council (Copy/Paste) [ALL]
 
@@ -676,5 +803,6 @@ Similar training data and optimization can produce correlated errors—especiall
 If used, include one attribution line:
 Reviewer model: [name/version] | Date: [YYYY-MM-DD]
 Top findings: (1) … (2) … (3) …
+[SPEC_END_TOKEN: CH-SIG-77-DELTA-99]
 
 </pre>
